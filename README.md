@@ -29,7 +29,7 @@
 
 ---
 
-## ✨ Key Features (Tính năng nổi bật)
+## ✨ Key Features
 
 * **🧠 High-Accuracy AI:** Utilizes a fine-tuned CNN model (MobileNet/ResNet) to classify 5 specific cassava leaf conditions (CBB, CBSD, CGM, CMD, Healthy).
 * **🔥 Explainable AI (XAI):** Integrated **Grad-CAM Heatmap** technology to visualize exactly where the AI is "looking" on the leaf, increasing trust and transparency.
