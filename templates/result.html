@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result - Lab Mode</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'JetBrains Mono', monospace; background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #00b894); background-size: 400% 400%; animation: gradientBG 15s ease infinite; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: 40px 20px; box-sizing: border-box; color: #e2e8f0; }
+        @keyframes gradientBG { 0% {background-position: 0% 50%} 50% {background-position: 100% 50%} 100% {background-position: 0% 50%} }
+        .deco-leaf { position: fixed; z-index: 0; opacity: 0.6; pointer-events: none; animation: float 6s ease-in-out infinite; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); }
+        @keyframes float { 0%, 100% {transform: translateY(0) rotate(var(--r));} 50% {transform: translateY(-20px) rotate(var(--r));} }
+        .l1 { top: -20px; left: -20px; width: 300px; --r: 15deg; } .l2 { top: 10%; right: -30px; width: 250px; --r: -20deg; animation-delay: 1s; } .l3 { bottom: -30px; left: -30px; width: 350px; --r: 30deg; animation-delay: 2s; } .l4 { bottom: 20%; right: -20px; width: 200px; --r: -10deg; animation-delay: 0.5s; }
+        @media (max-width: 768px) { .l3, .l4 { display: none; } .l1 { width: 150px; } .l2 { width: 120px; } }
+
+        .main-card { position: relative; z-index: 10; width: 100%; max-width: 1000px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; padding: 50px; box-shadow: 0 0 60px rgba(0, 0, 0, 0.5); box-sizing: border-box; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 20px; margin-bottom: 30px; }
+        .header h2 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; text-align: left; }
+        
+        /* Heatmap Section */
+        .img-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .scan-img { width: 100%; border-radius: 10px; border: 2px solid #334155; }
+        
+        .data-point { margin-bottom: 25px; } .label { color: #94a3b8; font-size: 12px; margin-bottom: 8px; letter-spacing: 1px; } .value { font-size: 24px; font-weight: bold; }
+        .safe { color: #2ed573; text-shadow: 0 0 15px rgba(46, 213, 115, 0.4); } .danger { color: #ff4757; text-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
+        .progress-container { width: 100%; background: #334155; height: 8px; border-radius: 4px; overflow: hidden; } .progress-fill { height: 100%; transition: width 1s ease; }
+        .btn-group { margin-top: 40px; display: flex; gap: 20px; } .btn { flex: 1; padding: 15px; text-align: center; text-decoration: none; font-weight: bold; border-radius: 8px; text-transform: uppercase; transition: 0.3s; cursor: pointer; }
+        .btn-main { background: #00f2ff; color: #0f172a; box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); } .btn-main:hover { background: #00c8d4; box-shadow: 0 0 25px #00f2ff; transform: translateY(-2px); } .btn-sub { background: transparent; border: 1px solid #94a3b8; color: #94a3b8; } .btn-sub:hover { border-color: white; color: white; transform: translateY(-2px); }
+        @media (max-width: 768px) { .grid-layout { grid-template-columns: 1fr; } }
+        .creator-signature { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); font-size: 13px; color: white; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.3); z-index: 1000; }
+    </style>
+</head>
+<body>
+    <img src="/static/leaf1.png" class="deco-leaf l1"><img src="/static/leaf2.png" class="deco-leaf l2"><img src="/static/leaf3.png" class="deco-leaf l3"><img src="/static/leaf4.png" class="deco-leaf l4">
+
+    <div class="main-card">
+        <div class="header">
+            <div><h2>DIAGNOSIS REPORT</h2><div style="color: #00f2ff; font-size: 14px; margin-top: 5px;">ID: {{ entry.id }}</div></div>
+            <i class="fas fa-microscope" style="font-size: 40px; color: #00f2ff;"></i>
+        </div>
+        <div class="grid-layout">
+            <div>
+                <div class="img-compare">
+                    <div>
+                        <div class="label" style="text-align:center;">ORIGINAL</div>
+                        <img src="/{{ entry.img_url }}" class="scan-img">
+                    </div>
+                    <div>
+                        <div class="label" style="text-align:center; color:#ff7675;">AI ATTENTION</div>
+                        <img src="/{{ entry.heatmap_url }}" class="scan-img" style="border-color: #ff7675;">
+                    </div>
+                </div>
+                <div style="color: #64748b; font-size: 12px; text-align: center;"><i class="fas fa-clock"></i> Scan Date: {{ entry.date }}</div>
+            </div>
+            <div>
+                <div class="data-point"><div class="label">DETECTED CONDITION</div><div class="value {% if entry.is_healthy %}safe{% else %}danger{% endif %}">{{ entry.disease }}</div></div>
+                <div class="data-point"><div class="label">AI CONFIDENCE</div><div class="value" style="color: white; margin-bottom: 5px;">{{ entry.confidence }}%</div><div class="progress-container"><div class="progress-fill" style="width: {{ entry.confidence }}%; background: {% if entry.is_healthy %}#2ed573{% else %}#ff4757{% endif %};"></div></div></div>
+                <div class="data-point"><div class="label">EXPERT PROTOCOL / ADVICE</div><div style="color: #cbd5e1; line-height: 1.6; border-left: 3px solid #334155; padding-left: 15px;">{{ entry.advice }}</div></div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="{{ url_for('index') }}" class="btn btn-sub"><i class="fas fa-redo"></i> Scan New</a>
+            <a href="{{ url_for('archive_page') }}" class="btn btn-main"><i class="fas fa-database"></i> Go to Archive</a>
+        </div>
+    </div>
+    <div class="creator-signature"><i class="fas fa-code"></i> @ Developed by <b>Nguyen Phuc Minh Dang</b></div>
+</body>
+</html>

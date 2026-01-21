@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Case Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #00b894); background-size: 400% 400%; animation: gradientBG 15s ease infinite; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: 40px 20px; box-sizing: border-box; }
+        @keyframes gradientBG { 0% {background-position: 0% 50%} 50% {background-position: 100% 50%} 100% {background-position: 0% 50%} }
+        .deco-leaf { position: fixed; z-index: 0; opacity: 0.6; pointer-events: none; animation: float 6s ease-in-out infinite; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); }
+        @keyframes float { 0%, 100% {transform: translateY(0) rotate(var(--r));} 50% {transform: translateY(-20px) rotate(var(--r));} }
+        .l1 { top: -20px; left: -20px; width: 300px; --r: 15deg; } .l2 { top: 10%; right: -30px; width: 250px; --r: -20deg; animation-delay: 1s; } .l3 { bottom: -30px; left: -30px; width: 350px; --r: 30deg; animation-delay: 2s; } .l4 { bottom: 20%; right: -20px; width: 200px; --r: -10deg; animation-delay: 0.5s; }
+        @media (max-width: 768px) { .l3, .l4 { display: none; } .l1 { width: 150px; } .l2 { width: 120px; } }
+
+        .main-card { position: relative; z-index: 10; width: 100%; max-width: 1000px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 30px; padding: 50px; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2); text-align: left; border: 1px solid rgba(255, 255, 255, 0.5); box-sizing: border-box; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #f1f2f6; padding-bottom: 20px;}
+        .btn-back { text-decoration: none; color: #636e72; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: 0.3s; } .btn-back:hover { color: #2d3436; transform: translateX(-5px); }
+        .btn-download-all { background: #0984e3; color: white; padding: 12px 25px; border-radius: 10px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3); transition: 0.3s; } .btn-download-all:hover { background: #74b9ff; transform: translateY(-2px); }
+
+        .dashboard-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; margin-bottom: 30px; }
+        .chart-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .list-box { flex: 1; }
+        @media (max-width: 800px) { .dashboard-grid { grid-template-columns: 1fr; } .chart-box { display: none; } }
+
+        .item { display: flex; align-items: center; gap: 20px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #dfe6e9; transition: 0.3s; margin-bottom: 15px; } .item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: #00b894; }
+        .thumb { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; }
+        .info { flex: 1; } .title { font-weight: bold; font-size: 18px; margin-bottom: 5px; } .meta { font-size: 13px; color: #b2bec3; font-family: monospace; }
+        .actions { display: flex; gap: 10px; } .act-btn { padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; transition: 0.3s; }
+        .pdf { background: #e3f9e5; color: #00b894; } .pdf:hover { background: #00b894; color: white; }
+        .del { background: #ffeaa7; color: #d63031; } .del:hover { background: #d63031; color: white; }
+        .creator-signature { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); font-size: 13px; color: white; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.3); z-index: 1000; }
+    </style>
+</head>
+<body>
+    <img src="/static/leaf1.png" class="deco-leaf l1"><img src="/static/leaf2.png" class="deco-leaf l2"><img src="/static/leaf3.png" class="deco-leaf l3"><img src="/static/leaf4.png" class="deco-leaf l4">
+
+    <div class="main-card">
+        <a href="{{ url_for('index') }}" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Diagnosis</a>
+        <div class="header-row">
+            <h2 style="margin: 0; color: #2d3436;">📂 Data Archive</h2>
+            {% if history %}<a href="{{ url_for('download_all') }}" class="btn-download-all"><i class="fas fa-file-archive"></i> Download All</a>{% endif %}
+        </div>
+
+        <div class="dashboard-grid">
+            {% if history %}
+            <div class="chart-box">
+                <h4 style="margin: 0 0 15px 0; text-align: center; color: #636e72;">Disease Statistics</h4>
+                <canvas id="diseaseChart"></canvas>
+            </div>
+            {% endif %}
+
+            <div class="list-box">
+                {% for item in history %}
+                <div class="item">
+                    <img src="/{{ item.img_url }}" class="thumb">
+                    <div class="info">
+                        <div class="title" style="color: {% if item.is_healthy %}#00b894{% else %}#d63031{% endif %};">{{ item.disease }}</div>
+                        <div class="meta">ID: {{ item.id }} | {{ item.date }}</div>
+                        <div class="meta">Confidence: {{ item.confidence }}%</div>
+                    </div>
+                    <div class="actions">
+                        <a href="/{{ item.pdf_url }}" download class="act-btn pdf"><i class="fas fa-download"></i> PDF</a>
+                        <a href="{{ url_for('delete_entry', entry_id=item.id) }}" class="act-btn del"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not history %}<div style="text-align: center; color: #b2bec3; padding: 60px;">No reports saved yet.</div>{% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="creator-signature"><i class="fas fa-code"></i> @ Developed by <b>Nguyen Phuc Minh Dang</b></div>
+
+    <script>
+        // Vẽ biểu đồ nếu có dữ liệu
+        {% if history %}
+        const ctx = document.getElementById('diseaseChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['CBB', 'CBSD', 'CGM', 'CMD', 'Healthy'],
+                datasets: [{
+                    data: {{ chart_data | safe }},
+                    backgroundColor: ['#ff7675', '#fdcb6e', '#ffeaa7', '#636e72', '#00b894'],
+                    borderWidth: 0
+                }]
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

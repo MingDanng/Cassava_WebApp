@@ -1,0 +1,8 @@
+__pycache__/
+venv/
+.env
+*.keras
+static/images/*
+static/pdfs/*
+static/heatmaps/*
+!static/images/.gitkeep
