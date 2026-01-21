@@ -99,8 +99,8 @@ Cassava_AI_Project/
 
 ---
 
-## 👨‍💻 Author
-
+## **👨‍💻 Author**
+```text
 **Nguyen Phuc Minh Dang**
 * **Role:** Developer & AI Researcher
 * **GitHub:** https://github.com/MingDanng
