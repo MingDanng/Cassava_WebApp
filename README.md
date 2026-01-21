@@ -96,11 +96,11 @@ Cassava_AI_Project/
 ├── app.py                   # Main Flask Application
 ├── cassava_best.keras       # Trained AI Model (Downloaded separately)
 └── requirements.txt         # Dependencies list
+```
 
 ---
 
 ## 👨‍💻 Author
-```text
 **Nguyen Phuc Minh Dang**
 * **Role:** Developer & AI Researcher
 * **GitHub:** https://github.com/MingDanng
