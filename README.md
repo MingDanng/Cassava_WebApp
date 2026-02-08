@@ -12,7 +12,7 @@
 ## 📸 Demo Preview
 
 ### ⚡ Real-time Diagnosis in Action
-![Demo Video](assets/demo_video.GIF)
+![Demo Video](assets/demo_video.gif)
 
 ### 🖥️ Interface Gallery
 
